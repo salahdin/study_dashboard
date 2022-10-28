@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'edc_lab.apps.AppConfig',
     'edc_lab_dashboard.apps.AppConfig',
     'study_dashboard.apps.AppConfig',
-
 ]
 
 MIDDLEWARE = [
