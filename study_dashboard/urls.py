@@ -1,21 +1,29 @@
-"""study_dashboard URL Configuration
+from django.conf import settings
+from django.conf import settings
+from django.urls.conf import path, include
+from edc_appointment.admin_site import edc_appointment_admin
+from edc_dashboard import UrlConfig
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
-from django.urls import path
+urlpatterns = []
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-]
+if settings.APP_NAME == 'study_dashboard':
+
+    from django.views.generic.base import RedirectView
+    from edc_base.auth.views import LoginView, LogoutView
+
+    #from .tests.admin import subject_test_admin
+
+    urlpatterns += [
+        path('edc_device/', include('edc_device.urls')),
+        path('edc_protocol/', include('edc_protocol.urls')),
+        path('admin/', edc_appointment_admin.urls),
+
+        path('admininistration/', RedirectView.as_view(url='admin/'),
+             name='administration_url'),
+        path('accounts/', include('edc_base.auth.urls')),
+        path('admin/', include('edc_base.auth.urls')),
+        path('edc_lab/', include('edc_lab.urls')),
+        path('edc_lab_dashboard/', include('edc_lab_dashboard.urls')),
+        path('login', LoginView.as_view(), name='login_url'),
+        path('logout', LogoutView.as_view(), name='logout_url'),
+        path(r'', RedirectView.as_view(url='admin/'), name='home_url')]
